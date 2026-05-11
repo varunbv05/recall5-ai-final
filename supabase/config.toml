@@ -1,0 +1,4 @@
+project_id = "hcathcfqumfrupawwvix"
+
+[functions.generate-revision]
+verify_jwt = false
