@@ -1,12 +1,10 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 const SYSTEM_PROMPT = `You are Recall5 AI, an elite study coach. You produce concise, exam-ready 5-minute revisions. Be precise, structured, and ruthless about cutting fluff. Use clear academic tone. When formulas are involved, render them in plain text or LaTeX-friendly notation.`;
@@ -65,13 +63,7 @@ const tool = {
           items: { type: "string" },
         },
       },
-      required: [
-        "summary",
-        "key_concepts",
-        "formulas",
-        "rapid_fire",
-        "exam_questions",
-      ],
+      required: ["summary", "key_concepts", "formulas", "rapid_fire", "exam_questions"],
       additionalProperties: false,
     },
   },
@@ -83,46 +75,37 @@ serve(async (req) => {
   }
 
   try {
-// GEMINI API KEY
-const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    // GEMINI API KEY
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
 
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+    const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-if (!GEMINI_API_KEY) {
-  throw new Error("GEMINI_API_KEY missing");
-}
-
-const supabase = createClient(
-  SUPABASE_URL,
-  SERVICE_ROLE
-);
-
-const {
-  sessionId,
-  subject,
-  chapter,
-  notes,
-} = await req.json();
-
-if (!sessionId || !subject || !chapter) {
-  return new Response(
-    JSON.stringify({
-      error:
-        "sessionId, subject and chapter are required",
-    }),
-    {
-      status: 400,
-      headers: {
-        ...corsHeaders,
-        "Content-Type": "application/json",
-      },
+    if (!GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY missing");
     }
-  );
-}
 
-// PREMIUM PROMPT
-const prompt = `
+    const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
+
+    const { sessionId, subject, chapter, notes } = await req.json();
+
+    if (!sessionId || !subject || !chapter) {
+      return new Response(
+        JSON.stringify({
+          error: "sessionId, subject and chapter are required",
+        }),
+        {
+          status: 400,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    }
+
+    // PREMIUM PROMPT
+    const prompt = `
 You are Recall5 AI, an elite AI study assistant.
 
 Generate a structured JSON response for:
@@ -170,53 +153,52 @@ Requirements:
 - No explanation outside JSON
 `;
 
-const aiRes = await fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-  {
-    method: "POST",
+    const aiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: "POST",
 
-    headers: {
-      "Content-Type": "application/json",
-    },
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-    body: JSON.stringify({
-      contents: [
-        {
-          parts: [
+        body: JSON.stringify({
+          contents: [
             {
-              text: prompt,
+              parts: [
+                {
+                  text: prompt,
+                },
+              ],
             },
           ],
-        },
-      ],
-    }),
-  }
-);
+        }),
+      },
+    );
 
-if (!aiRes.ok) {
-  const errorText = await aiRes.text();
+    if (!aiRes.ok) {
+      const errorText = await aiRes.text();
 
-  console.error(errorText);
+      console.error(errorText);
 
-  throw new Error("Gemini API request failed");
-}
+      throw new Error("Gemini API request failed");
+    }
 
-const aiJson = await aiRes.json();
+    const aiJson = await aiRes.json();
 
-const raw =
-  aiJson?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const raw = aiJson?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-if (!raw) {
-  throw new Error("No AI response returned");
-}
+    if (!raw) {
+      throw new Error("No AI response returned");
+    }
 
-// CLEAN JSON RESPONSE
-const cleaned = raw
-  .replace(/```json/g, "")
-  .replace(/```/g, "")
-  .trim();
+    // CLEAN JSON RESPONSE
+    const cleaned = raw
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
 
-const parsed = JSON.parse(cleaned);
+    const parsed = JSON.parse(cleaned);
 
     const { data: inserted, error: insErr } = await supabase
       .from("revisions")
@@ -246,9 +228,7 @@ const parsed = JSON.parse(cleaned);
     let nextStreak = 1;
     if (streak?.last_active) {
       const last = new Date(streak.last_active);
-      const diff = Math.floor(
-        (new Date(today).getTime() - last.getTime()) / 86400000,
-      );
+      const diff = Math.floor((new Date(today).getTime() - last.getTime()) / 86400000);
       if (diff === 0) nextStreak = streak.current_streak;
       else if (diff === 1) nextStreak = streak.current_streak + 1;
       else nextStreak = 1;

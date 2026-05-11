@@ -13,7 +13,10 @@ export const Route = createFileRoute("/dashboard/generate")({
   head: () => ({
     meta: [
       { title: "Generate Revision — Recall5 AI" },
-      { name: "description", content: "Paste notes, drop PDFs or photos and generate a 5-minute revision pack." },
+      {
+        name: "description",
+        content: "Paste notes, drop PDFs or photos and generate a 5-minute revision pack.",
+      },
     ],
   }),
   component: GeneratePage,
@@ -44,17 +47,30 @@ function AILoader({ subject, chapter }: { subject: string; chapter: string }) {
       className="glass-card-strong p-10 text-center"
     >
       <div className="relative w-20 h-20 mx-auto mb-6">
-        <div className="absolute inset-0 rounded-full"
-          style={{ background: "conic-gradient(from 0deg, oklch(0.68 0.24 295 / 0.8), oklch(0.78 0.16 210 / 0.8), oklch(0.68 0.24 295 / 0.8))", animation: "spin-slow 2.5s linear infinite", filter: "blur(4px)", opacity: 0.6 }} />
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              "conic-gradient(from 0deg, oklch(0.68 0.24 295 / 0.8), oklch(0.78 0.16 210 / 0.8), oklch(0.68 0.24 295 / 0.8))",
+            animation: "spin-slow 2.5s linear infinite",
+            filter: "blur(4px)",
+            opacity: 0.6,
+          }}
+        />
         <div className="absolute inset-1.5 rounded-full glass-card-strong flex items-center justify-center">
-          <Brain className="w-8 h-8 text-primary" style={{ animation: "ai-dot-pulse 2s ease-in-out infinite" }} />
+          <Brain
+            className="w-8 h-8 text-primary"
+            style={{ animation: "ai-dot-pulse 2s ease-in-out infinite" }}
+          />
         </div>
       </div>
 
       <div className="font-display text-xl font-bold mb-1">
         {subject && chapter ? `${subject} · ${chapter}` : "Building your revision pack"}
       </div>
-      <div className="text-muted-foreground text-sm mb-6">AI is thinking — this takes about 20 seconds</div>
+      <div className="text-muted-foreground text-sm mb-6">
+        AI is thinking — this takes about 20 seconds
+      </div>
 
       <div className="max-w-xs mx-auto space-y-2 mb-8">
         {AI_STEPS.map((s, i) => (
@@ -86,7 +102,10 @@ function AILoader({ subject, chapter }: { subject: string; chapter: string }) {
           animate={{ width: `${((step + 1) / AI_STEPS.length) * 100}%` }}
           transition={{ duration: 0.5 }}
           className="h-full rounded-full"
-          style={{ background: "var(--gradient-primary)", boxShadow: "0 0 12px oklch(0.68 0.24 295 / 0.6)" }}
+          style={{
+            background: "var(--gradient-primary)",
+            boxShadow: "0 0 12px oklch(0.68 0.24 295 / 0.6)",
+          }}
         />
       </div>
     </motion.div>
@@ -142,11 +161,17 @@ function GeneratePage() {
       });
 
       if (error) {
-        const msg = (error as any)?.context?.error || error.message || "Generation failed";
+        const msg =
+          (error as { context?: { error?: string } } | null)?.context?.error ||
+          error.message ||
+          "Generation failed";
         toast.error(String(msg));
         return;
       }
-      if (data?.error) { toast.error(data.error); return; }
+      if (data?.error) {
+        toast.error(data.error);
+        return;
+      }
       setResult(data.revision);
       toast.success("Revision pack ready ✓");
     } catch (e) {
@@ -163,8 +188,12 @@ function GeneratePage() {
         <div className="section-label mb-3">
           <Sparkles className="w-3 h-3" /> AI Generator
         </div>
-        <h1 className="font-display text-3xl md:text-4xl font-bold mt-1">Build a 5-minute revision</h1>
-        <p className="text-muted-foreground mt-1.5">Paste notes, drop PDFs or snap your handwritten pages.</p>
+        <h1 className="font-display text-3xl md:text-4xl font-bold mt-1">
+          Build a 5-minute revision
+        </h1>
+        <p className="text-muted-foreground mt-1.5">
+          Paste notes, drop PDFs or snap your handwritten pages.
+        </p>
       </div>
 
       <AnimatePresence mode="wait">
@@ -180,17 +209,23 @@ function GeneratePage() {
           >
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">Subject</label>
+                <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">
+                  Subject
+                </label>
                 <input
-                  value={subject} onChange={(e) => setSubject(e.target.value)}
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
                   placeholder="e.g. Physics"
                   className="input-field w-full px-4 py-3 text-sm"
                 />
               </div>
               <div>
-                <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">Chapter</label>
+                <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">
+                  Chapter
+                </label>
                 <input
-                  value={chapter} onChange={(e) => setChapter(e.target.value)}
+                  value={chapter}
+                  onChange={(e) => setChapter(e.target.value)}
                   placeholder="e.g. Electromagnetic Induction"
                   className="input-field w-full px-4 py-3 text-sm"
                 />
@@ -198,9 +233,12 @@ function GeneratePage() {
             </div>
 
             <div>
-              <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">Your notes</label>
+              <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">
+                Your notes
+              </label>
               <textarea
-                value={notes} onChange={(e) => setNotes(e.target.value)}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
                 placeholder="Paste your study notes, transcribed content, or anything relevant…"
                 rows={6}
                 className="input-field w-full px-4 py-3 text-sm resize-none"
@@ -208,21 +246,29 @@ function GeneratePage() {
             </div>
 
             <div>
-              <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">Upload files</label>
+              <label className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">
+                Upload files
+              </label>
               <div
                 {...getRootProps()}
                 className={`mt-1 border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
-                  isDragActive ? "dropzone-active" : "border-white/10 hover:border-white/18 hover:bg-white/3"
+                  isDragActive
+                    ? "dropzone-active"
+                    : "border-white/10 hover:border-white/18 hover:bg-white/3"
                 }`}
               >
                 <input {...getInputProps()} />
-                <div className={`w-12 h-12 mx-auto rounded-2xl glass-card flex items-center justify-center mb-3 transition-transform ${isDragActive ? "scale-110" : ""}`}>
+                <div
+                  className={`w-12 h-12 mx-auto rounded-2xl glass-card flex items-center justify-center mb-3 transition-transform ${isDragActive ? "scale-110" : ""}`}
+                >
                   <Upload className="w-5 h-5 text-primary" />
                 </div>
                 <div className="font-medium text-sm">
                   {isDragActive ? "Drop them here ✓" : "Drag PDFs or images of handwritten notes"}
                 </div>
-                <div className="text-xs text-muted-foreground mt-1">PNG, JPG, WEBP, PDF · up to 15MB · max 6 files</div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  PNG, JPG, WEBP, PDF · up to 15MB · max 6 files
+                </div>
               </div>
 
               <AnimatePresence>
@@ -241,9 +287,16 @@ function GeneratePage() {
                         exit={{ opacity: 0, scale: 0.85 }}
                         className="glass-card px-3 py-1.5 flex items-center gap-2 text-sm"
                       >
-                        {f.type.startsWith("image/") ? <ImageIcon className="w-3.5 h-3.5 text-accent" /> : <FileText className="w-3.5 h-3.5 text-primary" />}
+                        {f.type.startsWith("image/") ? (
+                          <ImageIcon className="w-3.5 h-3.5 text-accent" />
+                        ) : (
+                          <FileText className="w-3.5 h-3.5 text-primary" />
+                        )}
                         <span className="max-w-[160px] truncate text-xs">{f.name}</span>
-                        <button onClick={() => setFiles(files.filter((_, j) => j !== i))} className="text-muted-foreground hover:text-foreground transition ml-1">
+                        <button
+                          onClick={() => setFiles(files.filter((_, j) => j !== i))}
+                          className="text-muted-foreground hover:text-foreground transition ml-1"
+                        >
                           <X className="w-3.5 h-3.5" />
                         </button>
                       </motion.div>
@@ -254,7 +307,9 @@ function GeneratePage() {
             </div>
 
             <div className="pt-2 flex items-center justify-between">
-              <p className="text-xs text-muted-foreground">Takes ~20 seconds · Saved automatically</p>
+              <p className="text-xs text-muted-foreground">
+                Takes ~20 seconds · Saved automatically
+              </p>
               <GlowButton size="lg" onClick={generate} disabled={loading}>
                 <Sparkles className="w-4 h-4" />
                 Generate revision
@@ -280,7 +335,9 @@ function GeneratePage() {
                 </div>
                 <h2 className="font-display text-2xl font-bold">Your revision pack</h2>
               </div>
-              <span className="text-xs text-muted-foreground glass-card px-3 py-1.5 rounded-full">Saved to history ✓</span>
+              <span className="text-xs text-muted-foreground glass-card px-3 py-1.5 rounded-full">
+                Saved to history ✓
+              </span>
             </div>
             <RevisionResult r={result} />
           </motion.div>

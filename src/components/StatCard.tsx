@@ -45,7 +45,9 @@ export function StatCard({
       />
 
       <div className="flex items-center gap-2 text-muted-foreground text-[10px] uppercase tracking-widest mb-3">
-        <div className={`w-5 h-5 rounded-md flex items-center justify-center ${isPrimary ? "bg-primary/15" : "bg-accent/15"}`}>
+        <div
+          className={`w-5 h-5 rounded-md flex items-center justify-center ${isPrimary ? "bg-primary/15" : "bg-accent/15"}`}
+        >
           <Icon className={`w-3 h-3 ${isPrimary ? "text-primary" : "text-accent"}`} />
         </div>
         {label}
@@ -61,7 +63,11 @@ export function StatCard({
       {/* Bottom accent line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: isPrimary ? "var(--gradient-primary)" : "linear-gradient(90deg, oklch(0.78 0.16 210), oklch(0.82 0.18 180))" }}
+        style={{
+          background: isPrimary
+            ? "var(--gradient-primary)"
+            : "linear-gradient(90deg, oklch(0.78 0.16 210), oklch(0.82 0.18 180))",
+        }}
       />
     </motion.div>
   );

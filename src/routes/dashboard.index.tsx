@@ -1,7 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Flame, BookOpen, Brain, Clock, Sparkles, AlertTriangle, ArrowRight, TrendingUp } from "lucide-react";
+import {
+  Flame,
+  BookOpen,
+  Brain,
+  Clock,
+  Sparkles,
+  AlertTriangle,
+  ArrowRight,
+  TrendingUp,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSessionId } from "@/lib/session";
 import { StatCard } from "@/components/StatCard";
@@ -30,7 +39,10 @@ function DashboardHome() {
     queryKey: ["streak", sessionId],
     queryFn: async () => {
       const { data } = await supabase
-        .from("streaks").select("*").eq("session_id", sessionId).maybeSingle();
+        .from("streaks")
+        .select("*")
+        .eq("session_id", sessionId)
+        .maybeSingle();
       return data;
     },
     enabled: !!sessionId,
@@ -40,8 +52,11 @@ function DashboardHome() {
     queryKey: ["recent", sessionId],
     queryFn: async () => {
       const { data } = await supabase
-        .from("revisions").select("id, subject, chapter, summary, created_at")
-        .eq("session_id", sessionId).order("created_at", { ascending: false }).limit(5);
+        .from("revisions")
+        .select("id, subject, chapter, summary, created_at")
+        .eq("session_id", sessionId)
+        .order("created_at", { ascending: false })
+        .limit(5);
       return data || [];
     },
     enabled: !!sessionId,
@@ -51,8 +66,11 @@ function DashboardHome() {
     queryKey: ["weak", sessionId],
     queryFn: async () => {
       const { data } = await supabase
-        .from("weak_topics").select("*").eq("session_id", sessionId)
-        .order("mastery", { ascending: true }).limit(5);
+        .from("weak_topics")
+        .select("*")
+        .eq("session_id", sessionId)
+        .order("mastery", { ascending: true })
+        .limit(5);
       return data || [];
     },
     enabled: !!sessionId,
@@ -75,13 +93,21 @@ function DashboardHome() {
       <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground">
-            {new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}
+            {new Date().toLocaleDateString(undefined, {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            })}
           </div>
           <h1 className="font-display text-3xl md:text-4xl font-bold mt-1">{greeting}.</h1>
-          <p className="text-muted-foreground mt-1 text-sm">Five focused minutes is all it takes today.</p>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Five focused minutes is all it takes today.
+          </p>
         </div>
         <Link to="/dashboard/generate">
-          <GlowButton><Sparkles className="w-4 h-4" /> New revision</GlowButton>
+          <GlowButton>
+            <Sparkles className="w-4 h-4" /> New revision
+          </GlowButton>
         </Link>
       </div>
 
@@ -89,13 +115,22 @@ function DashboardHome() {
         <StatCard icon={Flame} label="Streak" value={streakDays} suffix="days" delay={0} />
         <StatCard icon={BookOpen} label="Revisions" value={total} delay={0.06} accent="accent" />
         <StatCard icon={Brain} label="Mastery" value={mastery} suffix="%" delay={0.12} />
-        <StatCard icon={Clock} label="Time saved" value={timeSaved} suffix="min" delay={0.18} accent="accent" />
+        <StatCard
+          icon={Clock}
+          label="Time saved"
+          value={timeSaved}
+          suffix="min"
+          delay={0.18}
+          accent="accent"
+        />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-5">
         {/* Weak topics */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.22 }}
           className="glass-card-strong p-6 lg:col-span-1"
         >
           <div className="flex items-center gap-2 mb-4">
@@ -117,7 +152,9 @@ function DashboardHome() {
               ))}
             </div>
           ) : weak.length === 0 ? (
-            <p className="text-sm text-muted-foreground leading-relaxed">No weak topics yet. Generate a few revisions and Recall5 will start tracking.</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              No weak topics yet. Generate a few revisions and Recall5 will start tracking.
+            </p>
           ) : (
             <div className="space-y-3">
               {weak.map((w) => (
@@ -133,9 +170,10 @@ function DashboardHome() {
                       transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       className="h-full rounded-full"
                       style={{
-                        background: w.mastery < 40
-                          ? "linear-gradient(90deg, oklch(0.7 0.22 20), oklch(0.78 0.18 320))"
-                          : "var(--gradient-primary)",
+                        background:
+                          w.mastery < 40
+                            ? "linear-gradient(90deg, oklch(0.7 0.22 20), oklch(0.78 0.18 320))"
+                            : "var(--gradient-primary)",
                         boxShadow: "0 0 6px oklch(0.68 0.24 295 / 0.3)",
                       }}
                     />
@@ -148,7 +186,9 @@ function DashboardHome() {
 
         {/* Recent revisions */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.28 }}
           className="glass-card-strong p-6 lg:col-span-2"
         >
           <div className="flex items-center justify-between mb-4">
@@ -158,14 +198,19 @@ function DashboardHome() {
               </div>
               <h2 className="font-display font-semibold">Recent revisions</h2>
             </div>
-            <Link to="/dashboard/history" className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition">
+            <Link
+              to="/dashboard/history"
+              className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition"
+            >
               View all <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
           {recentLoading ? (
             <div className="divide-y divide-white/5">
-              {[...Array(4)].map((_, i) => <SkeletonRow key={i} />)}
+              {[...Array(4)].map((_, i) => (
+                <SkeletonRow key={i} />
+              ))}
             </div>
           ) : recent.length === 0 ? (
             <div className="text-center py-12">
@@ -174,7 +219,9 @@ function DashboardHome() {
               </div>
               <div className="text-muted-foreground text-sm mb-4">No revisions yet.</div>
               <Link to="/dashboard/generate">
-                <GlowButton size="sm"><Sparkles className="w-4 h-4" /> Create your first</GlowButton>
+                <GlowButton size="sm">
+                  <Sparkles className="w-4 h-4" /> Create your first
+                </GlowButton>
               </Link>
             </div>
           ) : (
@@ -194,7 +241,9 @@ function DashboardHome() {
                       <BookOpen className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">{r.subject} · {r.chapter}</div>
+                      <div className="text-sm font-medium truncate">
+                        {r.subject} · {r.chapter}
+                      </div>
                       <div className="text-xs text-muted-foreground truncate mt-0.5">
                         {r.summary.replace(/[#*`]/g, "").slice(0, 90)}
                       </div>

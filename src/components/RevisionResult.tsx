@@ -68,7 +68,9 @@ function RapidFireCard({ q, a, idx }: { q: string; a: string; idx: number }) {
       <div className="flex items-center gap-2">
         <span className="text-primary font-mono text-sm font-bold shrink-0">Q{idx + 1}.</span>
         <span className="font-medium text-sm flex-1">{q}</span>
-        <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
       </div>
       <AnimatePresence>
         {open && (
@@ -90,20 +92,17 @@ function RapidFireCard({ q, a, idx }: { q: string; a: string; idx: number }) {
 
 export function RevisionResult({ r }: { r: Revision }) {
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-      className="space-y-4"
-    >
+    <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-4">
       <Section icon={BookOpen} title="5-Minute Summary" delay={0}>
-        <div className="markdown-body text-muted-foreground leading-relaxed space-y-3 text-sm
+        <div
+          className="markdown-body text-muted-foreground leading-relaxed space-y-3 text-sm
           [&_h1]:text-foreground [&_h1]:font-display [&_h1]:text-xl [&_h1]:font-semibold [&_h1]:mt-2
           [&_h2]:text-foreground [&_h2]:font-display [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:mt-2
           [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-semibold [&_h3]:mt-1
           [&_strong]:text-foreground [&_em]:text-foreground/85
           [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-1
-          [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:bg-white/6 [&_code]:text-accent [&_code]:font-mono [&_code]:text-[0.8em]">
+          [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:bg-white/6 [&_code]:text-accent [&_code]:font-mono [&_code]:text-[0.8em]"
+        >
           <ReactMarkdown>{r.summary}</ReactMarkdown>
         </div>
       </Section>
@@ -116,9 +115,17 @@ export function RevisionResult({ r }: { r: Revision }) {
           className="grid sm:grid-cols-2 gap-3"
         >
           {r.key_concepts.map((c, i) => (
-            <motion.div key={i} variants={itemVariants} className="glass-card p-4 card-hover gradient-border">
-              <div className="font-display font-semibold text-foreground text-[0.95rem]">{c.term}</div>
-              <div className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{c.definition}</div>
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              className="glass-card p-4 card-hover gradient-border"
+            >
+              <div className="font-display font-semibold text-foreground text-[0.95rem]">
+                {c.term}
+              </div>
+              <div className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                {c.definition}
+              </div>
             </motion.div>
           ))}
         </motion.div>
@@ -136,8 +143,10 @@ export function RevisionResult({ r }: { r: Revision }) {
                 className="glass-card p-4 flex flex-wrap items-center gap-3"
               >
                 <span className="text-foreground font-medium text-sm">{f.name}</span>
-                <code className="px-3 py-1.5 rounded-lg bg-accent/8 border border-accent/15 text-accent font-mono text-sm"
-                  style={{ boxShadow: "0 0 10px oklch(0.78 0.16 210 / 0.08)" }}>
+                <code
+                  className="px-3 py-1.5 rounded-lg bg-accent/8 border border-accent/15 text-accent font-mono text-sm"
+                  style={{ boxShadow: "0 0 10px oklch(0.78 0.16 210 / 0.08)" }}
+                >
                   {f.expression}
                 </code>
                 {f.note && <span className="text-xs text-muted-foreground">{f.note}</span>}
@@ -155,7 +164,12 @@ export function RevisionResult({ r }: { r: Revision }) {
         </div>
       </Section>
 
-      <Section icon={GraduationCap} title="Likely Exam Questions" delay={0.2} badge={r.exam_questions.length}>
+      <Section
+        icon={GraduationCap}
+        title="Likely Exam Questions"
+        delay={0.2}
+        badge={r.exam_questions.length}
+      >
         <div className="space-y-2">
           {r.exam_questions.map((q, i) => (
             <motion.div

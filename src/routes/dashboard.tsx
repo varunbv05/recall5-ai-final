@@ -7,7 +7,10 @@ export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — Recall5 AI" },
-      { name: "description", content: "Your study dashboard: streak, weak topics, and recent revisions." },
+      {
+        name: "description",
+        content: "Your study dashboard: streak, weak topics, and recent revisions.",
+      },
     ],
   }),
   component: DashboardLayout,
@@ -29,8 +32,12 @@ function DashboardLayout() {
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-4 left-4 right-4 glass-card-strong rounded-2xl p-2 flex items-center justify-around z-30"
-        style={{ boxShadow: "0 8px 30px -10px oklch(0.1 0.03 280 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.08)" }}>
+      <nav
+        className="md:hidden fixed bottom-4 left-4 right-4 glass-card-strong rounded-2xl p-2 flex items-center justify-around z-30"
+        style={{
+          boxShadow: "0 8px 30px -10px oklch(0.1 0.03 280 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.08)",
+        }}
+      >
         {mobile.map((it) => {
           const active = it.exact ? path === it.to : path.startsWith(it.to);
           return (
@@ -44,7 +51,9 @@ function DashboardLayout() {
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
-              <it.icon className={cn("w-5 h-5 transition-transform", active && "scale-110 text-primary")} />
+              <it.icon
+                className={cn("w-5 h-5 transition-transform", active && "scale-110 text-primary")}
+              />
               <span className={cn("font-medium", active ? "" : "font-normal")}>{it.label}</span>
             </Link>
           );

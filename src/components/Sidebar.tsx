@@ -21,7 +21,9 @@ export function Sidebar() {
           <div className="font-display font-bold text-lg leading-none">
             Recall5<span className="gradient-text">AI</span>
           </div>
-          <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground mt-1">5-min revisions</div>
+          <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground mt-1">
+            5-min revisions
+          </div>
         </div>
       </Link>
 
@@ -51,7 +53,9 @@ export function Sidebar() {
               <it.icon className={cn("w-4 h-4 shrink-0", active && "text-primary")} />
               <span className={active ? "font-medium" : ""}>{it.label}</span>
               {it.label === "Generate" && (
-                <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/20 font-medium">AI</span>
+                <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/20 font-medium">
+                  AI
+                </span>
               )}
             </Link>
           );

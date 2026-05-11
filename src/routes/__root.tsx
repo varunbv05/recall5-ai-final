@@ -75,10 +75,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Recall5 AI — Master any subject in 5 minutes" },
-      { name: "description", content: "AI-powered study revision. Paste notes, upload PDFs or handwritten pages, and get a concise 5-minute revision pack with key concepts, formulas, rapid-fire and exam questions." },
+      {
+        name: "description",
+        content:
+          "AI-powered study revision. Paste notes, upload PDFs or handwritten pages, and get a concise 5-minute revision pack with key concepts, formulas, rapid-fire and exam questions.",
+      },
       { name: "author", content: "Recall5 AI" },
       { property: "og:title", content: "Recall5 AI" },
-      { property: "og:description", content: "Master any subject in 5 minutes with AI-generated revision packs." },
+      {
+        property: "og:description",
+        content: "Master any subject in 5 minutes with AI-generated revision packs.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
